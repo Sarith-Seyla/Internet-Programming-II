@@ -12,8 +12,10 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const req = context.switchToHttp().getRequest();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { method, url } = req;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    const method = req?.method || 'GraphQL';
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    const url = req?.url || 'Endpoint';
 
     const start = Date.now();
     return next.handle().pipe(

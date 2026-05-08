@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EVENT_PUBLISHER } from '../core/tokens';
+// import { EVENT_PUBLISHER } from '../core/tokens';
 
 type EventPublisher = { publish: (event: string, payload: any) => void };
 
 @Injectable()
 export class NotificationsService {
   constructor(
-    @Inject(EVENT_PUBLISHER)
+    @Inject("String")
     private readonly publisher: EventPublisher,
   ) {}
 
