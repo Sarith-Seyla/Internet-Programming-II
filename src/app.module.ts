@@ -22,9 +22,9 @@ import { GraphqlModule } from 'graphql/graphql.module';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      typePaths: [join(process.cwd(), 'src/graphql/schema/*.graphql')],
-      // autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
-      playground: false, // Set to false to use the plugin instead
+      // typePaths: [join(process.cwd(), 'src/graphql/schema/*.graphql')],
+      autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
+      playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     TypeOrmModule.forRoot({
