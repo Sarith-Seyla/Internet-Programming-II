@@ -1,69 +1,48 @@
 <template>
-  <ul class="todoLists">
-    <template v-if="status == 'completed'">
+  <div class="todoLists">
+    <template v-if="status === 'completed'">
       <TodoItem
         v-for="todo of completedTasks"
-        icon="uil-adobe-alt"
+        :key="todo.id"
+        icon="uil-check-circle"
         :todo="todo"
       />
+      <p v-if="completedTasks.length === 0" class="empty-state">No completed tasks yet.</p>
     </template>
     <template v-else>
       <TodoItem
         v-for="todo of pendingTasks"
-        icon="uil-adobe-alt"
+        :key="todo.id"
+        icon="uil-clock"
         :todo="todo"
       />
+      <p v-if="pendingTasks.length === 0" class="empty-state">No pending tasks. Add one above.</p>
     </template>
-  </ul>
+  </div>
 </template>
 <script>
-import { mapState } from "pinia";
 import TodoItem from "./TodoItem.vue";
 import { useTodoStore } from "../stores/todo";
 
 export default {
+  name: "TodoList",
+  components: {
+    TodoItem,
+  },
+  props: ["status"],
   setup() {
     const todoStore = useTodoStore();
     return { todoStore };
   },
-  name: "TodoList",
-  props: ["status"],
-  components: {
-    TodoItem,
-  },
-  data() {
-    return {
-      color: "red",
-    };
-  },
   async mounted() {
-    // we will call action fetchTodos
     await this.todoStore.fetchTodos();
   },
   computed: {
-    ...mapState(useTodoStore, ["todos", "countTodos"]),
     completedTasks() {
-      if (this.todos) {
-        return this.todos.filter((todo) => todo.completedAt != null);
-      }
-      return [];
+      return this.todoStore.todos.filter((todo) => todo.is_done);
     },
     pendingTasks() {
-      if (this.todos) {
-        // if (this.todos.length > 2) {
-        //   this.todos.push({ task: "new" });
-        // }
-        return this.todos.filter((todo) => todo.completedAt == null);
-      }
-      return [];
-    },
-  },
-  watch: {
-    todos: {
-      immediate: true,
-      handler: function (dataChanged) {
-        console.log("todos are changed");
-      },
+      return this.todoStore.todos.filter((todo) => !todo.is_done);
     },
   },
 };
